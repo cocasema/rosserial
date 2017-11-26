@@ -34,8 +34,7 @@
 
 #include "ros/time.h"
 
-namespace ros
-{
+namespace ros {
 void normalizeSecNSec(uint32_t& sec, uint32_t& nsec)
 {
   uint32_t nsec_part = nsec % 1000000000UL;
@@ -52,7 +51,7 @@ Time& Time::fromNSec(int32_t t)
   return *this;
 }
 
-Time& Time::operator +=(const Duration &rhs)
+Time& Time::operator+=(const Duration& rhs)
 {
   sec += rhs.sec;
   nsec += rhs.nsec;
@@ -60,7 +59,7 @@ Time& Time::operator +=(const Duration &rhs)
   return *this;
 }
 
-Time& Time::operator -=(const Duration &rhs)
+Time& Time::operator-=(const Duration& rhs)
 {
   sec += -rhs.sec;
   nsec += -rhs.nsec;

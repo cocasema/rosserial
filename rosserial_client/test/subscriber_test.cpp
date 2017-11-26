@@ -8,35 +8,17 @@ unsigned char buffer[1];
 class DummyMsg
 {
 public:
-  int serialize(unsigned char *outbuffer) const
-  {
-    return 0;
-  }
-  int deserialize(unsigned char *inbuffer)
-  {
-    return 0;
-  }
-  const char * getType()
-  {
-    return "";
-  }
-  const char * getMD5()
-  {
-    return "";
-  }
+  int serialize(unsigned char* outbuffer) const { return 0; }
+  int deserialize(unsigned char* inbuffer) { return 0; }
+  const char* getType() { return ""; }
+  const char* getMD5() { return ""; }
 };
 
 class DummyClass
 {
 public:
-  static void staticCallback(const DummyMsg& msg)
-  {
-    callbackCalled = true;
-  }
-  void memberCallback(const DummyMsg& msg)
-  {
-    callbackCalled = true;
-  }
+  static void staticCallback(const DummyMsg& msg) { callbackCalled = true; }
+  void memberCallback(const DummyMsg& msg) { callbackCalled = true; }
 };
 
 
@@ -60,7 +42,7 @@ TEST(TestSubscriber, testMemberCallback)
 }
 
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

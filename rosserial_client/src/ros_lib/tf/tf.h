@@ -37,8 +37,7 @@
 
 #include "geometry_msgs/TransformStamped.h"
 
-namespace tf
-{
+namespace tf {
 
 static inline geometry_msgs::Quaternion createQuaternionFromYaw(double yaw)
 {
@@ -49,8 +48,6 @@ static inline geometry_msgs::Quaternion createQuaternionFromYaw(double yaw)
   q.w = cos(yaw * 0.5);
   return q;
 }
-
 }
 
 #endif
-

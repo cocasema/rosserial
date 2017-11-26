@@ -38,20 +38,19 @@
 #include "ros.h"
 #include "tfMessage.h"
 
-namespace tf
-{
+namespace tf {
 
 class TransformBroadcaster
 {
 public:
-  TransformBroadcaster() : publisher_("/tf", &internal_msg) {}
-
-  void init(ros::NodeHandle &nh)
+  TransformBroadcaster()
+      : publisher_("/tf", &internal_msg)
   {
-    nh.advertise(publisher_);
   }
 
-  void sendTransform(geometry_msgs::TransformStamped &transform)
+  void init(ros::NodeHandle& nh) { nh.advertise(publisher_); }
+
+  void sendTransform(geometry_msgs::TransformStamped& transform)
   {
     internal_msg.transforms_length = 1;
     internal_msg.transforms = &transform;
@@ -62,8 +61,6 @@ private:
   tf::tfMessage internal_msg;
   ros::Publisher publisher_;
 };
-
 }
 
 #endif
-

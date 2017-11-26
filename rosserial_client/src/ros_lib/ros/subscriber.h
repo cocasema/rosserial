@@ -37,36 +37,37 @@
 
 #include "rosserial_msgs/TopicInfo.h"
 
-namespace ros
-{
+namespace ros {
 
 /* Base class for objects subscribers. */
 class Subscriber_
 {
 public:
-  virtual void callback(unsigned char *data) = 0;
+  virtual void callback(unsigned char* data) = 0;
   virtual int getEndpointType() = 0;
 
   // id_ is set by NodeHandle when we advertise
   int id_;
 
-  virtual const char * getMsgType() = 0;
-  virtual const char * getMsgMD5() = 0;
-  const char * topic_;
+  virtual const char* getMsgType() = 0;
+  virtual const char* getMsgMD5() = 0;
+  const char* topic_;
 };
 
 /* Bound function subscriber. */
-template<typename MsgT, typename ObjT = void>
-class Subscriber: public Subscriber_
+template <typename MsgT, typename ObjT = void>
+class Subscriber : public Subscriber_
 {
 public:
-  typedef void(ObjT::*CallbackT)(const MsgT&);
+  typedef void (ObjT::*CallbackT)(const MsgT&);
   MsgT msg;
 
-  Subscriber(const char * topic_name, CallbackT cb, ObjT* obj, int endpoint = rosserial_msgs::TopicInfo::ID_SUBSCRIBER) :
-    cb_(cb),
-    obj_(obj),
-    endpoint_(endpoint)
+  Subscriber(
+      const char* topic_name, CallbackT cb, ObjT* obj,
+      int endpoint = rosserial_msgs::TopicInfo::ID_SUBSCRIBER)
+      : cb_(cb)
+      , obj_(obj)
+      , endpoint_(endpoint)
   {
     topic_ = topic_name;
   };
@@ -77,18 +78,9 @@ public:
     (obj_->*cb_)(msg);
   }
 
-  virtual const char * getMsgType()
-  {
-    return this->msg.getType();
-  }
-  virtual const char * getMsgMD5()
-  {
-    return this->msg.getMD5();
-  }
-  virtual int getEndpointType()
-  {
-    return endpoint_;
-  }
+  virtual const char* getMsgType() { return this->msg.getType(); }
+  virtual const char* getMsgMD5() { return this->msg.getMD5(); }
+  virtual int getEndpointType() { return endpoint_; }
 
 private:
   CallbackT cb_;
@@ -97,16 +89,17 @@ private:
 };
 
 /* Standalone function subscriber. */
-template<typename MsgT>
-class Subscriber<MsgT, void>: public Subscriber_
+template <typename MsgT>
+class Subscriber<MsgT, void> : public Subscriber_
 {
 public:
-  typedef void(*CallbackT)(const MsgT&);
+  typedef void (*CallbackT)(const MsgT&);
   MsgT msg;
 
-  Subscriber(const char * topic_name, CallbackT cb, int endpoint = rosserial_msgs::TopicInfo::ID_SUBSCRIBER) :
-    cb_(cb),
-    endpoint_(endpoint)
+  Subscriber(
+      const char* topic_name, CallbackT cb, int endpoint = rosserial_msgs::TopicInfo::ID_SUBSCRIBER)
+      : cb_(cb)
+      , endpoint_(endpoint)
   {
     topic_ = topic_name;
   };
@@ -117,24 +110,14 @@ public:
     this->cb_(msg);
   }
 
-  virtual const char * getMsgType()
-  {
-    return this->msg.getType();
-  }
-  virtual const char * getMsgMD5()
-  {
-    return this->msg.getMD5();
-  }
-  virtual int getEndpointType()
-  {
-    return endpoint_;
-  }
+  virtual const char* getMsgType() { return this->msg.getType(); }
+  virtual const char* getMsgMD5() { return this->msg.getMD5(); }
+  virtual int getEndpointType() { return endpoint_; }
 
 private:
   CallbackT cb_;
   int endpoint_;
 };
-
 }
 
 #endif
