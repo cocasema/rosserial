@@ -14,7 +14,7 @@
 #include <ros.h>
 #include <std_msgs/UInt16.h>
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
 #ifdef TARGET_LPC1768
 Servo servo(p21);
@@ -25,22 +25,23 @@ Servo servo(D8);
 #endif
 DigitalOut myled(LED1);
 
-void servo_cb( const std_msgs::UInt16& cmd_msg) {
-    servo.position(cmd_msg.data); //set servo angle, should be from 0-180
-    myled = !myled;  //toggle led
+void servo_cb(const std_msgs::UInt16& cmd_msg)
+{
+  servo.position(cmd_msg.data); //set servo angle, should be from 0-180
+  myled = !myled;               //toggle led
 }
 
 
 ros::Subscriber<std_msgs::UInt16> sub("servo", servo_cb);
 
-int main() {
+int main()
+{
 
-    nh.initNode();
-    nh.subscribe(sub);
+  nh.initNode();
+  nh.subscribe(sub);
 
-    while (1) {
-        nh.spinOnce();
-        wait_ms(1);
-    }
+  while (1) {
+    nh.spinOnce();
+    wait_ms(1);
+  }
 }
-

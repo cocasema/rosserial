@@ -12,48 +12,50 @@
 
 #include "BufferedSerial.h"
 
-class MbedHardware {
-  public:
-    MbedHardware(PinName tx, PinName rx, long baud = 57600)
-      :iostream(tx, rx){
-      baud_ = baud;
-      t.start();
+class MbedHardware
+{
+public:
+  MbedHardware(PinName tx, PinName rx, long baud = 57600)
+      : iostream(tx, rx)
+  {
+    baud_ = baud;
+    t.start();
+  }
+
+  MbedHardware()
+      : iostream(USBTX, USBRX)
+  {
+    baud_ = 57600;
+    t.start();
+  }
+
+  void setBaud(long baud) { this->baud_ = baud; }
+
+  int getBaud() { return baud_; }
+
+  void init() { iostream.baud(baud_); }
+
+  int read()
+  {
+    if (iostream.readable()) {
+      return iostream.getc();
     }
-
-    MbedHardware()
-      :iostream(USBTX, USBRX) {
-        baud_ = 57600;
-        t.start();
+    else {
+      return -1;
     }
+  };
+  void write(uint8_t* data, int length)
+  {
+    for (int i = 0; i < length; i++)
+      iostream.putc(data[i]);
+  }
 
-    void setBaud(long baud){
-      this->baud_= baud;
-    }
-
-    int getBaud(){return baud_;}
-
-    void init(){
-        iostream.baud(baud_);
-    }
-
-    int read(){
-        if (iostream.readable()) {
-            return iostream.getc();
-        } else {
-            return -1;
-        }
-    };
-    void write(uint8_t* data, int length) {
-        for (int i=0; i<length; i++)
-             iostream.putc(data[i]);
-    }
-
-    unsigned long time(){return t.read_ms();}
+  unsigned long time() { return t.read_ms(); }
 
 protected:
-    BufferedSerial iostream;
-    long baud_;
-    Timer t;
+  BufferedSerial iostream;
+  long baud_;
+  Timer t;
 };
 
 

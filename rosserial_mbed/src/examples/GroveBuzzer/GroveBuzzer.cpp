@@ -13,7 +13,7 @@
 #include <ros.h>
 #include <std_msgs/Float32MultiArray.h>
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
 #ifdef TARGET_LPC1768
 PwmOut buzzer(p21);
@@ -43,8 +43,7 @@ void beep(float freq, float time)
 
 void messageCb(const std_msgs::Float32MultiArray& msg)
 {
-  if (!playing)
-  {
+  if (!playing) {
     playing = true;
     // msg.data[0] - Note
     // msg.data[1] - duration in seconds
@@ -60,8 +59,7 @@ int main()
   led = 1;
   nh.initNode();
   nh.subscribe(sub);
-  while (1)
-  {
+  while (1) {
     nh.spinOnce();
     wait_ms(1);
   }

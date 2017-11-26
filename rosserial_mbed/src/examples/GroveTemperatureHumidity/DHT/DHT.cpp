@@ -41,18 +41,13 @@ DHT::DHT(PinName pin, eType DHTtype)
   _firsttime = true;
 }
 
-DHT::~DHT()
-{
+DHT::~DHT() {}
 
-}
-
-eError DHT::stall(DigitalInOut &io, int const level, int const max_time)
+eError DHT::stall(DigitalInOut& io, int const level, int const max_time)
 {
   int cnt = 0;
-  while (level == io)
-  {
-    if (cnt > max_time)
-    {
+  while (level == io) {
+    if (cnt > max_time) {
       return ERROR_NO_PATIENCE;
     }
     cnt++;
@@ -64,7 +59,7 @@ eError DHT::stall(DigitalInOut &io, int const level, int const max_time)
 eError DHT::readData()
 {
   uint8_t i = 0, j = 0, b = 0, data_valid = 0;
-  uint32_t bit_value[DHT_DATA_BIT_COUNT] = {0};
+  uint32_t bit_value[DHT_DATA_BIT_COUNT] = { 0 };
 
   eError err = ERROR_NONE;
   //time_t currentTime = time(NULL);
@@ -72,8 +67,7 @@ eError DHT::readData()
   DigitalInOut DHT_io(_pin);
 
   // IO must be in hi state to start
-  if (ERROR_NONE != stall(DHT_io, 0, 250))
-  {
+  if (ERROR_NONE != stall(DHT_io, 0, 250)) {
     return BUS_BUSY;
   }
 
@@ -86,45 +80,35 @@ eError DHT::readData()
   wait_us(30);
   DHT_io.input();
   // wait till the sensor grabs the bus
-  if (ERROR_NONE != stall(DHT_io, 1, 40))
-  {
+  if (ERROR_NONE != stall(DHT_io, 1, 40)) {
     return ERROR_NOT_PRESENT;
   }
   // sensor should signal low 80us and then hi 80us
-  if (ERROR_NONE != stall(DHT_io, 0, 100))
-  {
+  if (ERROR_NONE != stall(DHT_io, 0, 100)) {
     return ERROR_SYNC_TIMEOUT;
   }
-  if (ERROR_NONE != stall(DHT_io, 1, 100))
-  {
+  if (ERROR_NONE != stall(DHT_io, 1, 100)) {
     return ERROR_NO_PATIENCE;
   }
   // capture the data
-  for (i = 0; i < 5; i++)
-  {
-    for (j = 0; j < 8; j++)
-    {
-      if (ERROR_NONE != stall(DHT_io, 0, 75))
-      {
+  for (i = 0; i < 5; i++) {
+    for (j = 0; j < 8; j++) {
+      if (ERROR_NONE != stall(DHT_io, 0, 75)) {
         return ERROR_DATA_TIMEOUT;
       }
       // logic 0 is 28us max, 1 is 70us
       wait_us(40);
       bit_value[i * 8 + j] = DHT_io;
-      if (ERROR_NONE != stall(DHT_io, 1, 50))
-      {
+      if (ERROR_NONE != stall(DHT_io, 1, 50)) {
         return ERROR_DATA_TIMEOUT;
       }
     }
   }
   // store the data
-  for (i = 0; i < 5; i++)
-  {
+  for (i = 0; i < 5; i++) {
     b = 0;
-    for (j = 0; j < 8; j++)
-    {
-      if (bit_value[i * 8 + j] == 1)
-      {
+    for (j = 0; j < 8; j++) {
+      if (bit_value[i * 8 + j] == 1) {
         b |= (1 << (7 - j));
       }
     }
@@ -134,28 +118,23 @@ eError DHT::readData()
   // uncomment to see the checksum error if it exists
   //printf(" 0x%02x + 0x%02x + 0x%02x + 0x%02x = 0x%02x \n", DHT_data[0], DHT_data[1], DHT_data[2], DHT_data[3], DHT_data[4]);
   data_valid = DHT_data[0] + DHT_data[1] + DHT_data[2] + DHT_data[3];
-  if (DHT_data[4] == data_valid)
-  {
+  if (DHT_data[4] == data_valid) {
     //_lastReadTime = currentTime;
     _lastTemperature = CalcTemperature();
     _lastHumidity = CalcHumidity();
-
   }
-  else
-  {
+  else {
     err = ERROR_CHECKSUM;
   }
 
   return err;
-
 }
 
 float DHT::CalcTemperature()
 {
   int v;
 
-  switch (_DHTtype)
-  {
+  switch (_DHTtype) {
   case DHT11:
     v = DHT_data[2];
     return float(v);
@@ -171,20 +150,11 @@ float DHT::CalcTemperature()
   return 0;
 }
 
-float DHT::ReadHumidity()
-{
-  return _lastHumidity;
-}
+float DHT::ReadHumidity() { return _lastHumidity; }
 
-float DHT::ConvertCelciustoFarenheit(float const celsius)
-{
-  return celsius * 9 / 5 + 32;
-}
+float DHT::ConvertCelciustoFarenheit(float const celsius) { return celsius * 9 / 5 + 32; }
 
-float DHT::ConvertCelciustoKelvin(float const celsius)
-{
-  return celsius + 273.15;
-}
+float DHT::ConvertCelciustoKelvin(float const celsius) { return celsius + 273.15; }
 
 // dewPoint function NOAA
 // reference: http://wahiduddin.net/calc/density_algorithms.htm
@@ -193,8 +163,8 @@ float DHT::CalcdewPoint(float const celsius, float const humidity)
   float A0 = 373.15 / (273.15 + celsius);
   float SUM = -7.90298 * (A0 - 1);
   SUM += 5.02808 * log10(A0);
-  SUM += -1.3816e-7 * (pow(10, (11.344 * (1 - 1 / A0))) - 1) ;
-  SUM += 8.1328e-3 * (pow(10, (-3.49149 * (A0 - 1))) - 1) ;
+  SUM += -1.3816e-7 * (pow(10, (11.344 * (1 - 1 / A0))) - 1);
+  SUM += 8.1328e-3 * (pow(10, (-3.49149 * (A0 - 1))) - 1);
   SUM += log10(1013.246);
   float VP = pow(10, SUM - 3) * humidity;
   float T = log(VP / 0.61078); // temp var
@@ -227,8 +197,7 @@ float DHT::CalcHumidity()
 {
   int v;
 
-  switch (_DHTtype)
-  {
+  switch (_DHTtype) {
   case DHT11:
     v = DHT_data[0];
     return float(v);
@@ -241,5 +210,3 @@ float DHT::CalcHumidity()
   }
   return 0;
 }
-
-

@@ -15,7 +15,7 @@
 #include <sensor_msgs/Temperature.h>
 #include <sensor_msgs/RelativeHumidity.h>
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
 sensor_msgs::Temperature temp_msg;
 sensor_msgs::RelativeHumidity humidity_msg;
@@ -46,14 +46,11 @@ int main()
   temp_msg.header.frame_id = "/base_link";
   humidity_msg.header.frame_id = "/base_link";
 
-  while (1)
-  {
+  while (1) {
 
-    if (t.read_ms() > publisher_timer)
-    {
+    if (t.read_ms() > publisher_timer) {
       error = sensor.readData();
-      if (0 == error)
-      {
+      if (0 == error) {
         temp_msg.temperature = sensor.ReadTemperature(CELCIUS);
         temp_msg.header.stamp = nh.now();
         pub_temp.publish(&temp_msg);
@@ -67,4 +64,3 @@ int main()
     nh.spinOnce();
   }
 }
-

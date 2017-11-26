@@ -20,47 +20,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 #include "Buffer.h"
 
 template <class T>
 Buffer<T>::Buffer(uint32_t size)
 {
-    _buf = new T [size];
-    _size = size;
-    clear();
-    
-    return;
+  _buf = new T[size];
+  _size = size;
+  clear();
+
+  return;
 }
 
 template <class T>
 Buffer<T>::~Buffer()
 {
-    delete [] _buf;
-    
-    return;
+  delete[] _buf;
+
+  return;
 }
 
 template <class T>
-uint32_t Buffer<T>::getSize() 
-{ 
-    return this->_size; 
+uint32_t Buffer<T>::getSize()
+{
+  return this->_size;
 }
 
 template <class T>
 void Buffer<T>::clear(void)
 {
-    _wloc = 0;
-    _rloc = 0;
-    memset(_buf, 0, _size);
-    
-    return;
+  _wloc = 0;
+  _rloc = 0;
+  memset(_buf, 0, _size);
+
+  return;
 }
 
 template <class T>
 uint32_t Buffer<T>::peek(char c)
 {
-    return 1;
+  return 1;
 }
 
 // make the linker aware of some possible types

@@ -37,14 +37,14 @@
 
 enum eType
 {
-  DHT11     = 11,
+  DHT11 = 11,
   SEN11301P = 11,
-  RHT01     = 11,
-  DHT22     = 22,
-  AM2302    = 22,
+  RHT01 = 11,
+  DHT22 = 22,
+  AM2302 = 22,
   SEN51035P = 22,
-  RHT02     = 22,
-  RHT03     = 22
+  RHT02 = 22,
+  RHT03 = 22
 };
 typedef enum eType eType;
 
@@ -74,7 +74,6 @@ class DHT
 {
 
 public:
-
   DHT(PinName pin, eType DHTtype);
   ~DHT();
   eError readData(void);
@@ -84,7 +83,7 @@ public:
   float CalcdewPointFast(float const celsius, float const humidity);
 
 private:
-  time_t  _lastReadTime;
+  time_t _lastReadTime;
   float _lastTemperature;
   float _lastHumidity;
   PinName _pin;
@@ -95,8 +94,7 @@ private:
   float CalcHumidity();
   float ConvertCelciustoFarenheit(float const);
   float ConvertCelciustoKelvin(float const);
-  eError stall(DigitalInOut &io, int const level, int const max_time);
-
+  eError stall(DigitalInOut& io, int const level, int const max_time);
 };
 
 #endif

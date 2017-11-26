@@ -91,7 +91,7 @@ private:
 };
 
 
-extern SoftwarePWM Intensity[] ;
+extern SoftwarePWM Intensity[];
 #define INTENSITY_FACTOR 10
 
 #endif

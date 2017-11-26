@@ -35,30 +35,32 @@ ros::Publisher p("adc", &adc_msg);
 
 
 //We average the analog reading to elminate some of the noise
-int averageAnalog(PinName pin) {
-    int v=0;
-    for (int i=0; i<4; i++) v+= AnalogIn(pin).read_u16();
-    return v/4;
+int averageAnalog(PinName pin)
+{
+  int v = 0;
+  for (int i = 0; i < 4; i++)
+    v += AnalogIn(pin).read_u16();
+  return v / 4;
 }
 
 long adc_timer;
 
-int main() {
-    nh.initNode();
+int main()
+{
+  nh.initNode();
 
-    nh.advertise(p);
+  nh.advertise(p);
 
-    while (1) {
-        adc_msg.adc0 = averageAnalog(adc0);
-        adc_msg.adc1 = averageAnalog(adc1);
-        adc_msg.adc2 = averageAnalog(adc2);
-        adc_msg.adc3 = averageAnalog(adc3);
-        adc_msg.adc4 = averageAnalog(adc4);
-        adc_msg.adc5 = averageAnalog(adc5);
+  while (1) {
+    adc_msg.adc0 = averageAnalog(adc0);
+    adc_msg.adc1 = averageAnalog(adc1);
+    adc_msg.adc2 = averageAnalog(adc2);
+    adc_msg.adc3 = averageAnalog(adc3);
+    adc_msg.adc4 = averageAnalog(adc4);
+    adc_msg.adc5 = averageAnalog(adc5);
 
-        p.publish(&adc_msg);
+    p.publish(&adc_msg);
 
-        nh.spinOnce();
-    }
+    nh.spinOnce();
+  }
 }
-

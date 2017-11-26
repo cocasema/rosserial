@@ -12,20 +12,21 @@
 #include <std_msgs/Time.h>
 
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
 std_msgs::Time test;
 ros::Publisher p("my_topic", &test);
 
-int main() {
-    nh.initNode();
-    nh.advertise(p);
+int main()
+{
+  nh.initNode();
+  nh.advertise(p);
 
-    while (1) {
-        test.data = nh.now();
-        p.publish( &test );
-        nh.spinOnce();
-        wait_ms(10);
-    }
+  while (1) {
+    test.data = nh.now();
+    p.publish(&test);
+    nh.spinOnce();
+    wait_ms(10);
+  }
 }
 #endif

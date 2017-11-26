@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-  
+
 #ifndef MBED_SERVO_H
 #define MBED_SERVO_H
 
@@ -49,50 +49,51 @@
  * }
  * @endcode
  */
-class Servo {
+class Servo
+{
 
 public:
-    /** Create a servo object connected to the specified PwmOut pin
+  /** Create a servo object connected to the specified PwmOut pin
      *
      * @param pin PwmOut pin to connect to 
      */
-    Servo(PinName pin);
-    
-    /** Set the servo position, normalised to it's full range
+  Servo(PinName pin);
+
+  /** Set the servo position, normalised to it's full range
      *
      * @param percent A normalised number 0.0-1.0 to represent the full range.
      */
-    void write(float percent);
-    
-    /**  Read the servo motors current position
+  void write(float percent);
+
+  /**  Read the servo motors current position
      *
      * @param returns A normalised number 0.0-1.0  representing the full range.
      */
-    float read();
-    
-    /** Set the servo position
+  float read();
+
+  /** Set the servo position
      *
      * @param degrees Servo position in degrees
      */
-    void position(float degrees);
-    
-    /**  Allows calibration of the range and angles for a particular servo
+  void position(float degrees);
+
+  /**  Allows calibration of the range and angles for a particular servo
      *
      * @param range Pulsewidth range from center (1.5ms) to maximum/minimum position in seconds
      * @param degrees Angle from centre to maximum/minimum position in degrees
      */
-    void calibrate(float range = 0.0005, float degrees = 45.0); 
-        
-    /**  Shorthand for the write and read functions */
-    Servo& operator= (float percent);
-    Servo& operator= (Servo& rhs);
-    operator float();
+  void calibrate(float range = 0.0005, float degrees = 45.0);
+
+  /**  Shorthand for the write and read functions */
+  Servo& operator=(float percent);
+  Servo& operator=(Servo& rhs);
+  operator float();
 
 protected:
-    PwmOut _pwm;
-    float _range;
-    float _degrees;
-    float _p;
+  PwmOut _pwm;
+  float _range;
+  float _degrees;
+  float _p;
 };
 
 #endif

@@ -26,20 +26,20 @@
 #include "SoftwarePWM.h"
 
 /**************Motor ID**********************/
-#define MOTORA                  0
-#define MOTORB                  1
+#define MOTORA 0
+#define MOTORB 1
 
-#define LOW                     0
-#define HIGH                    1
+#define LOW 0
+#define HIGH 1
 
-#define MOTOR_POSITION_LEFT     0
-#define MOTOR_POSITION_RIGHT    1
-#define MOTOR_CLOCKWISE         0
-#define MOTOR_ANTICLOCKWISE     1
+#define MOTOR_POSITION_LEFT 0
+#define MOTOR_POSITION_RIGHT 1
+#define MOTOR_CLOCKWISE 0
+#define MOTOR_ANTICLOCKWISE 1
 
-#define USE_DC_MOTOR            0
+#define USE_DC_MOTOR 0
 
-#define MOTOR_PERIOD            10000 //10ms
+#define MOTOR_PERIOD 10000 //10ms
 
 struct MotorStruct
 {
@@ -55,7 +55,6 @@ class MotorDriver
 {
 
 public:
-
   /** Create Motor Driver instance
    *  @param int1 pin 1 of motor movement control
    *  @param int2 pin 2 of motor movement control
@@ -64,7 +63,14 @@ public:
       @param speedA speed control of motorA
       @param speedB speed control of motorB
    */
-  MotorDriver(PinName int1, PinName int2, PinName int3, PinName int4, PinName speedA, PinName speedB): _int1(int1), _int2(int2), _int3(int3), _int4(int4), _speedA(speedA), _speedB(speedB)
+  MotorDriver(
+      PinName int1, PinName int2, PinName int3, PinName int4, PinName speedA, PinName speedB)
+      : _int1(int1)
+      , _int2(int2)
+      , _int3(int3)
+      , _int4(int4)
+      , _speedA(speedA)
+      , _speedB(speedB)
   {
     _int1 = 0;
     _int2 = 0;
@@ -140,11 +146,10 @@ public:
   MotorStruct motorB;
 
 private:
-
-  DigitalOut  _int1;
-  DigitalOut  _int2;
-  DigitalOut  _int3;
-  DigitalOut  _int4;
+  DigitalOut _int1;
+  DigitalOut _int2;
+  DigitalOut _int3;
+  DigitalOut _int4;
   SoftwarePWM _speedA;
   SoftwarePWM _speedB;
 };

@@ -13,7 +13,7 @@
 #include <ros.h>
 #include <std_msgs/Float32.h>
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
 std_msgs::Float32 temp_msg;
 ros::Publisher pub_temp("temperature", &temp_msg);
@@ -26,53 +26,53 @@ ros::Publisher pub_temp("temperature", &temp_msg);
 // most significant bits for the address 0x91 >> 1 = 0x48
 // 0x90 >> 1 = 0x48 (72)
 
-int sensorAddress = 0x91 >>1;  // From datasheet sensor address is 0x91
+int sensorAddress = 0x91 >> 1; // From datasheet sensor address is 0x91
                                // shift the address 1 bit right, the Wire library only needs the 7
                                // most significant bits for the address
 
 Timer t;
 #ifdef TARGET_LPC1768
-I2C i2c(p9, p10);        // sda, scl
+I2C i2c(p9, p10); // sda, scl
 #elif defined(TARGET_KL25Z) || defined(TARGET_NUCLEO_F401RE)
-I2C i2c(D14, D15);       // sda, scl
+I2C i2c(D14, D15); // sda, scl
 #else
 #error "You need to specify a pin for the sensor"
 #endif
 
-int main() {
-    t.start();
+int main()
+{
+  t.start();
 
-    nh.initNode();
-    nh.advertise(pub_temp);
+  nh.initNode();
+  nh.advertise(pub_temp);
 
-    long publisher_timer =0;
+  long publisher_timer = 0;
 
-    while (1) {
+  while (1) {
 
-        if (t.read_ms() > publisher_timer) {
-            // step 1: request reading from sensor
-            //Wire.requestFrom(sensorAddress,2);
-            char cmd = 2;
-            i2c.write(sensorAddress, &cmd, 1);
+    if (t.read_ms() > publisher_timer) {
+      // step 1: request reading from sensor
+      //Wire.requestFrom(sensorAddress,2);
+      char cmd = 2;
+      i2c.write(sensorAddress, &cmd, 1);
 
-            wait_ms(50);
+      wait_ms(50);
 
-            char msb;
-            char lsb;
-            int temperature;
-            i2c.read(sensorAddress, &msb, 1); // receive high byte (full degrees)
-            i2c.read(sensorAddress, &lsb, 1); // receive low byte (fraction degrees)
+      char msb;
+      char lsb;
+      int temperature;
+      i2c.read(sensorAddress, &msb, 1); // receive high byte (full degrees)
+      i2c.read(sensorAddress, &lsb, 1); // receive low byte (fraction degrees)
 
-            temperature = ((msb) << 4);  // MSB
-            temperature |= (lsb >> 4);   // LSB
+      temperature = ((msb) << 4); // MSB
+      temperature |= (lsb >> 4);  // LSB
 
-            temp_msg.data = temperature*0.0625;
-            pub_temp.publish(&temp_msg);
+      temp_msg.data = temperature * 0.0625;
+      pub_temp.publish(&temp_msg);
 
-            publisher_timer = t.read_ms() + 1000;
-        }
-
-        nh.spinOnce();
+      publisher_timer = t.read_ms() + 1000;
     }
-}
 
+    nh.spinOnce();
+  }
+}

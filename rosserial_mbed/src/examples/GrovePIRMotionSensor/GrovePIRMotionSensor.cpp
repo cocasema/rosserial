@@ -13,7 +13,7 @@
 #include <ros.h>
 #include <std_msgs/Bool.h>
 
-ros::NodeHandle  nh;
+ros::NodeHandle nh;
 
 std_msgs::Bool motion_msg;
 ros::Publisher pub_motion("motion", &motion_msg);
@@ -36,11 +36,9 @@ int main()
 
   long publisher_timer = 0;
 
-  while (1)
-  {
+  while (1) {
 
-    if (t.read_ms() > publisher_timer)
-    {
+    if (t.read_ms() > publisher_timer) {
       motion_msg.data = sig1;
       pub_motion.publish(&motion_msg);
       publisher_timer = t.read_ms() + 1000;
@@ -48,4 +46,3 @@ int main()
     nh.spinOnce();
   }
 }
-

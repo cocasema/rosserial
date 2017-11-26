@@ -33,7 +33,7 @@
  ##
 
 format: .clang-format
-	@ find rosserial_client rosserial_server rosserial_test \
+	@ find rosserial_client rosserial_server rosserial_test rosserial_mbed \
 		-regextype egrep -regex '.*\.[ch](pp)?$$' \
 		-exec sh -c "echo 'formatting {}' && clang-format -i '{}' -style=file" \
 	\;

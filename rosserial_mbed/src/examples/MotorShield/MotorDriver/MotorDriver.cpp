@@ -36,43 +36,45 @@ void MotorDriver::init()
 }
 void MotorDriver::configure(uint8_t position, uint8_t motorID)
 {
-  if (motorID == MOTORA)motorA.position = position;
-  else motorB.position = position;
+  if (motorID == MOTORA)
+    motorA.position = position;
+  else
+    motorB.position = position;
 }
 
 void MotorDriver::setSpeed(uint8_t speed, uint8_t motorID)
 {
-  if (motorID == MOTORA) motorA.speed = speed;
-  else if (motorID == MOTORB) motorB.speed = speed;
+  if (motorID == MOTORA)
+    motorA.speed = speed;
+  else if (motorID == MOTORB)
+    motorB.speed = speed;
 }
 void MotorDriver::setDirection(uint8_t direction, uint8_t motorID)
 {
-  if (motorID == MOTORA)motorA.direction = direction;
-  else if (motorID == MOTORB)motorB.direction = direction;
+  if (motorID == MOTORA)
+    motorA.direction = direction;
+  else if (motorID == MOTORB)
+    motorB.direction = direction;
 }
 
 void MotorDriver::rotate(uint8_t direction, uint8_t motor_position)
 {
-  if (motor_position == motorA.position)
-  {
+  if (motor_position == motorA.position) {
     rotateWithID(direction, MOTORA);
   }
-  if (motor_position == motorB.position)
-  {
+  if (motor_position == motorB.position) {
     rotateWithID(direction, MOTORB);
   }
 }
 
 void MotorDriver::rotateWithID(uint8_t direction, uint8_t motorID)
 {
-  if (motorID == MOTORA)
-  {
+  if (motorID == MOTORA) {
     _speedA.Enable(motorA.speed * 100, MOTOR_PERIOD);
     _int1 = (MOTOR_CLOCKWISE == direction) ? LOW : HIGH;
     _int2 = !_int1;
   }
-  else if (motorID == MOTORB)
-  {
+  else if (motorID == MOTORB) {
     _speedB.Enable(motorB.speed * 100, MOTOR_PERIOD);
     _int3 = (MOTOR_CLOCKWISE == direction) ? LOW : HIGH;
     _int4 = !_int3;
@@ -108,7 +110,8 @@ void MotorDriver::stop()
 
 void MotorDriver::stop(uint8_t motorID)
 {
-  if (motorID == MOTORA)_speedA.Disable();
-  else if (motorID == MOTORB)_speedB.Disable();
+  if (motorID == MOTORA)
+    _speedA.Disable();
+  else if (motorID == MOTORB)
+    _speedB.Disable();
 }
-
