@@ -56,8 +56,7 @@ int main(int argc, char* argv[])
 
   boost::asio::io_service io_service;
   rosserial_server::UdpSocketSession udp_socket_session(
-      io_service,
-      udp::endpoint(udp::v4(), server_port),
+      io_service, udp::endpoint(udp::v4(), server_port),
       udp::endpoint(address::from_string(client_addr), client_port));
   io_service.run();
 

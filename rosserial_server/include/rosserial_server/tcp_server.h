@@ -43,18 +43,17 @@
 #include "rosserial_server/session.h"
 
 
-namespace rosserial_server
-{
+namespace rosserial_server {
 
 using boost::asio::ip::tcp;
 
-template< typename Session = rosserial_server::Session<tcp::socket> >
+template <typename Session = rosserial_server::Session<tcp::socket> >
 class TcpServer
 {
 public:
   TcpServer(boost::asio::io_service& io_service, short port)
-    : io_service_(io_service),
-      acceptor_(io_service, tcp::endpoint(tcp::v4(), port))
+      : io_service_(io_service)
+      , acceptor_(io_service, tcp::endpoint(tcp::v4(), port))
   {
     start_accept();
   }
@@ -63,20 +62,18 @@ private:
   void start_accept()
   {
     Session* new_session = new Session(io_service_);
-    acceptor_.async_accept(new_session->socket(),
-        boost::bind(&TcpServer::handle_accept, this, new_session,
-          boost::asio::placeholders::error));
+    acceptor_.async_accept(
+        new_session->socket(),
+        boost::bind(
+            &TcpServer::handle_accept, this, new_session, boost::asio::placeholders::error));
   }
 
-  void handle_accept(Session* new_session,
-      const boost::system::error_code& error)
+  void handle_accept(Session* new_session, const boost::system::error_code& error)
   {
-    if (!error)
-    {
+    if (!error) {
       new_session->start();
     }
-    else
-    {
+    else {
       delete new_session;
     }
 
@@ -87,6 +84,6 @@ private:
   tcp::acceptor acceptor_;
 };
 
-}  // namespace
+} // namespace
 
-#endif  // ROSSERIAL_SERVER_TCP_SERVER_H
+#endif // ROSSERIAL_SERVER_TCP_SERVER_H

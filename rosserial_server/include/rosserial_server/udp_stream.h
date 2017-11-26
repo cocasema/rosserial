@@ -44,8 +44,7 @@
 #include "rosserial_server/session.h"
 
 
-namespace rosserial_server
-{
+namespace rosserial_server {
 
 using boost::asio::ip::udp;
 using boost::asio::handler_type;
@@ -54,7 +53,8 @@ using boost::asio::handler_type;
 class UdpStream : public udp::socket
 {
 public:
-  explicit UdpStream(boost::asio::io_service& io_service) : udp::socket(io_service)
+  explicit UdpStream(boost::asio::io_service& io_service)
+      : udp::socket(io_service)
   {
   }
 
@@ -71,14 +71,13 @@ public:
   }
 
   template <typename ConstBufferSequence, typename WriteHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler,
-      void (boost::system::error_code, std::size_t))
-  async_write_some(const ConstBufferSequence& buffers,
-      BOOST_ASIO_MOVE_ARG(WriteHandler) handler)
+  BOOST_ASIO_INITFN_RESULT_TYPE(WriteHandler, void(boost::system::error_code, std::size_t))
+  async_write_some(const ConstBufferSequence& buffers, BOOST_ASIO_MOVE_ARG(WriteHandler) handler)
   {
     // If you get an error on the following line it means that your handler does
     // not meet the documented type requirements for a WriteHandler.
-    BOOST_ASIO_WRITE_HANDLER_CHECK(WriteHandler, handler) type_check;
+    BOOST_ASIO_WRITE_HANDLER_CHECK(WriteHandler, handler)
+    type_check;
 
     return this->get_service().async_send_to(
         this->get_implementation(), buffers, client_endpoint_, 0,
@@ -86,14 +85,13 @@ public:
   }
 
   template <typename MutableBufferSequence, typename ReadHandler>
-  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler,
-      void (boost::system::error_code, std::size_t))
-  async_read_some(const MutableBufferSequence& buffers,
-      BOOST_ASIO_MOVE_ARG(ReadHandler) handler)
+  BOOST_ASIO_INITFN_RESULT_TYPE(ReadHandler, void(boost::system::error_code, std::size_t))
+  async_read_some(const MutableBufferSequence& buffers, BOOST_ASIO_MOVE_ARG(ReadHandler) handler)
   {
     // If you get an error on the following line it means that your handler does
     // not meet the documented type requirements for a ReadHandler.
-    BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler) type_check;
+    BOOST_ASIO_READ_HANDLER_CHECK(ReadHandler, handler)
+    type_check;
 
     return this->get_service().async_receive_from(
         this->get_implementation(), buffers, client_endpoint_, 0,
@@ -104,6 +102,6 @@ private:
   udp::endpoint client_endpoint_;
 };
 
-}  // namespace
+} // namespace
 
-#endif  // ROSSERIAL_SERVER_UDP_STREAM_H
+#endif // ROSSERIAL_SERVER_UDP_STREAM_H

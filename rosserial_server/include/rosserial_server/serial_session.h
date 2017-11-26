@@ -42,16 +42,19 @@
 
 #include "rosserial_server/session.h"
 
-namespace rosserial_server
-{
+namespace rosserial_server {
 
 class SerialSession : public Session<boost::asio::serial_port>
 {
 public:
   SerialSession(boost::asio::io_service& io_service, std::string port, int baud)
-    : Session(io_service), port_(port), baud_(baud), timer_(io_service)
+      : Session(io_service)
+      , port_(port)
+      , baud_(baud)
+      , timer_(io_service)
   {
-    ROS_INFO_STREAM("rosserial_server session configured for " << port_ << " at " << baud << "bps.");
+    ROS_INFO_STREAM(
+        "rosserial_server session configured for " << port_ << " at " << baud << "bps.");
 
     failed_connection_attempts_ = 0;
     check_connection();
@@ -60,15 +63,13 @@ public:
 private:
   void check_connection()
   {
-    if (!is_active())
-    {
+    if (!is_active()) {
       attempt_connection();
     }
 
     // Every second, check again if the connection should be reinitialized,
     // if the ROS node is still up.
-    if (ros::ok())
-    {
+    if (ros::ok()) {
       timer_.expires_from_now(boost::posix_time::milliseconds(2000));
       timer_.async_wait(boost::bind(&SerialSession::check_connection, this));
     }
@@ -84,8 +85,10 @@ private:
       failed_connection_attempts_++;
       if (failed_connection_attempts_ == 1) {
         ROS_ERROR_STREAM("Unable to open port " << port_ << ": " << ec);
-      } else {
-        ROS_DEBUG_STREAM("Unable to open port " << port_ << " (" << failed_connection_attempts_ << "): " << ec);
+      }
+      else {
+        ROS_DEBUG_STREAM(
+            "Unable to open port " << port_ << " (" << failed_connection_attempts_ << "): " << ec);
       }
       return;
     }
@@ -109,6 +112,6 @@ private:
   int failed_connection_attempts_;
 };
 
-}  // namespace
+} // namespace
 
-#endif  // ROSSERIAL_SERVER_SERIAL_SESSION_H
+#endif // ROSSERIAL_SERVER_SERIAL_SESSION_H

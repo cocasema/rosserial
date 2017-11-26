@@ -44,37 +44,38 @@
 #include "rosserial_server/udp_stream.h"
 
 
-namespace rosserial_server
-{
+namespace rosserial_server {
 
 using boost::asio::ip::udp;
 
 class UdpSocketSession : public Session<UdpStream>
 {
 public:
-  UdpSocketSession(boost::asio::io_service& io_service,
-                   udp::endpoint server_endpoint,
-                   udp::endpoint client_endpoint)
-    : Session(io_service), timer_(io_service),
-      server_endpoint_(server_endpoint), client_endpoint_(client_endpoint)
+  UdpSocketSession(
+      boost::asio::io_service& io_service, udp::endpoint server_endpoint,
+      udp::endpoint client_endpoint)
+      : Session(io_service)
+      , timer_(io_service)
+      , server_endpoint_(server_endpoint)
+      , client_endpoint_(client_endpoint)
   {
-    ROS_INFO_STREAM("rosserial_server UDP session created between " << server_endpoint << " and " << client_endpoint);
+    ROS_INFO_STREAM(
+        "rosserial_server UDP session created between " << server_endpoint << " and "
+                                                        << client_endpoint);
     check_connection();
   }
 
 private:
   void check_connection()
   {
-    if (!is_active())
-    {
+    if (!is_active()) {
       socket().open(server_endpoint_, client_endpoint_);
       start();
     }
 
     // Every second, check again if the connection should be reinitialized,
     // if the ROS node is still up.
-    if (ros::ok())
-    {
+    if (ros::ok()) {
       timer_.expires_from_now(boost::posix_time::milliseconds(2000));
       timer_.async_wait(boost::bind(&UdpSocketSession::check_connection, this));
     }
@@ -85,6 +86,6 @@ private:
   udp::endpoint client_endpoint_;
 };
 
-}  // namespace
+} // namespace
 
-#endif  // ROSSERIAL_SERVER_UDP_SOCKET_SESSION_H
+#endif // ROSSERIAL_SERVER_UDP_SOCKET_SESSION_H
