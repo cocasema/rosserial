@@ -35,20 +35,9 @@ public:
 
   void init() { iostream.baud(baud_); }
 
-  int read()
-  {
-    if (iostream.readable()) {
-      return iostream.getc();
-    }
-    else {
-      return -1;
-    }
-  };
-  void write(uint8_t* data, int length)
-  {
-    for (int i = 0; i < length; i++)
-      iostream.putc(data[i]);
-  }
+  int read() { return iostream.readable() ? iostream.getc() : -1; }
+
+  void write(uint8_t* data, int length) { iostream.write(data, length); }
 
   unsigned long time() { return t.read_ms(); }
 
