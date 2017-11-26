@@ -6,9 +6,10 @@
 #include "rosserial/time.cpp"
 #include <iostream>
 
-class ClientComms {
+class ClientComms
+{
 public:
-  // Can smuggle in an fd representing either the back end of 
+  // Can smuggle in an fd representing either the back end of
   // a socket or serial pty, and run the same tests over both.
   static int fd;
 
@@ -16,19 +17,15 @@ public:
   // dependent on the passage of time.
   static unsigned long millis;
 
-  void init() {
-  }
-  int read() {
+  void init() {}
+  int read()
+  {
     unsigned char ch;
     ssize_t ret = ::read(fd, &ch, 1);
     return ret == 1 ? ch : -1;
   }
-  void write(uint8_t* data, int length) {
-    ::write(fd, data, length);
-  }
-  unsigned long time() {
-    return millis;
-  } 
+  void write(uint8_t* data, int length) { ::write(fd, data, length); }
+  unsigned long time() { return millis; }
 };
 
 int ClientComms::fd = -1;
@@ -38,4 +35,4 @@ namespace ros {
 typedef NodeHandle_<ClientComms, 5, 5, 200, 200> NodeHandle;
 }
 
-#endif  // ROSSERIAL_ROS_H
+#endif // ROSSERIAL_ROS_H

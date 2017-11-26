@@ -14,7 +14,8 @@ namespace rosserial {
  * Single message published from a rosserial-connected client,
  * verified from a roscpp Subscriber.
  */
-TEST_F(SingleClientFixture, single_publish) {
+TEST_F(SingleClientFixture, single_publish)
+{
   // Rosserial client set up to publish simple message.
   rosserial::std_msgs::String string_msg;
   rosserial::ros::Publisher client_pub("chatter", &string_msg);
@@ -27,11 +28,12 @@ TEST_F(SingleClientFixture, single_publish) {
   StringCallback str_callback;
   ros::Subscriber check_sub = nh.subscribe("chatter", 1, &StringCallback::callback, &str_callback);
 
-  for(int attempt = 0; attempt < 50; attempt++) {
+  for (int attempt = 0; attempt < 50; attempt++) {
     client_pub.publish(&string_msg);
     client_nh.spinOnce();
     ros::spinOnce();
-    if (str_callback.times_called > 0) break;
+    if (str_callback.times_called > 0)
+      break;
     ros::Duration(0.1).sleep();
   }
   EXPECT_GT(str_callback.times_called, 0);
@@ -51,8 +53,10 @@ static void rosserial_string_cb(const rosserial::std_msgs::String& msg)
  * Single message sent from a roscpp Publisher, received
  * by a rosserial client subscriber.
  */
-TEST_F(SingleClientFixture, single_subscribe) {
-  rosserial::ros::Subscriber<rosserial::std_msgs::String> client_sub("chatter", rosserial_string_cb);
+TEST_F(SingleClientFixture, single_subscribe)
+{
+  rosserial::ros::Subscriber<rosserial::std_msgs::String> client_sub(
+      "chatter", rosserial_string_cb);
   client_nh.subscribe(client_sub);
   client_nh.initNode();
 
@@ -60,18 +64,20 @@ TEST_F(SingleClientFixture, single_subscribe) {
 
   std_msgs::String string_msg;
   string_msg.data = "to-rosserial-client";
-  for(int attempt = 0; attempt < 50; attempt++) {
+  for (int attempt = 0; attempt < 50; attempt++) {
     pub.publish(string_msg);
     ros::spinOnce();
     client_nh.spinOnce();
-    if (rosserial_string_cb_count > 0) break;
+    if (rosserial_string_cb_count > 0)
+      break;
     ros::Duration(0.1).sleep();
   }
   EXPECT_GT(rosserial_string_cb_count, 0);
   EXPECT_EQ(string_msg.data, last_string);
 }
 
-int main(int argc, char **argv){
+int main(int argc, char** argv)
+{
   ros::init(argc, argv, "test_publish_subscribe");
   ros::start();
   testing::InitGoogleTest(&argc, argv);

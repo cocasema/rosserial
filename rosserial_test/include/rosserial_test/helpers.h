@@ -1,8 +1,10 @@
 
-template<class Msg>
-class Callback {
+template <class Msg>
+class Callback
+{
 public:
-  Callback() : times_called(0)
+  Callback()
+      : times_called(0)
   {
   }
 
@@ -16,5 +18,3 @@ public:
   int times_called;
 };
 typedef Callback<std_msgs::String> StringCallback;
-
-
